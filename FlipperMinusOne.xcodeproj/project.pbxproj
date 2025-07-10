@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E9D810152E1EAB030037D4F7 /* CocoaMQTT in Frameworks */ = {isa = PBXBuildFile; productRef = E9D810142E1EAB030037D4F7 /* CocoaMQTT */; };
+		E9D810172E1EAB030037D4F7 /* CocoaMQTTWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = E9D810162E1EAB030037D4F7 /* CocoaMQTTWebSocket */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		E9D80F4F2E1D460F0037D4F7 /* FlipperMinusOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlipperMinusOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +28,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9D810172E1EAB030037D4F7 /* CocoaMQTTWebSocket in Frameworks */,
+				E9D810152E1EAB030037D4F7 /* CocoaMQTT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +72,8 @@
 			);
 			name = FlipperMinusOne;
 			packageProductDependencies = (
+				E9D810142E1EAB030037D4F7 /* CocoaMQTT */,
+				E9D810162E1EAB030037D4F7 /* CocoaMQTTWebSocket */,
 			);
 			productName = FlipperMinusOne;
 			productReference = E9D80F4F2E1D460F0037D4F7 /* FlipperMinusOne.app */;
@@ -94,6 +103,9 @@
 			);
 			mainGroup = E9D80F462E1D460F0037D4F7;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E9D810132E1EAB030037D4F7 /* XCRemoteSwiftPackageReference "CocoaMQTT" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E9D80F502E1D460F0037D4F7 /* Products */;
 			projectDirPath = "";
@@ -324,6 +336,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E9D810132E1EAB030037D4F7 /* XCRemoteSwiftPackageReference "CocoaMQTT" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/emqx/CocoaMQTT.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.9;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E9D810142E1EAB030037D4F7 /* CocoaMQTT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9D810132E1EAB030037D4F7 /* XCRemoteSwiftPackageReference "CocoaMQTT" */;
+			productName = CocoaMQTT;
+		};
+		E9D810162E1EAB030037D4F7 /* CocoaMQTTWebSocket */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9D810132E1EAB030037D4F7 /* XCRemoteSwiftPackageReference "CocoaMQTT" */;
+			productName = CocoaMQTTWebSocket;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E9D80F472E1D460F0037D4F7 /* Project object */;
 }
