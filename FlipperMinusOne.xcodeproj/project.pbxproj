@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E9D810152E1EAB030037D4F7 /* CocoaMQTT in Frameworks */ = {isa = PBXBuildFile; productRef = E9D810142E1EAB030037D4F7 /* CocoaMQTT */; };
-		E9D810172E1EAB030037D4F7 /* CocoaMQTTWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = E9D810162E1EAB030037D4F7 /* CocoaMQTTWebSocket */; };
+		E9B9ED372E26E8EE005CD181 /* CocoaMQTT in Frameworks */ = {isa = PBXBuildFile; productRef = E9B9ED362E26E8EE005CD181 /* CocoaMQTT */; };
+		E9B9ED392E26E8EE005CD181 /* CocoaMQTTWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = E9B9ED382E26E8EE005CD181 /* CocoaMQTTWebSocket */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,18 +28,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9D810172E1EAB030037D4F7 /* CocoaMQTTWebSocket in Frameworks */,
-				E9D810152E1EAB030037D4F7 /* CocoaMQTT in Frameworks */,
+				E9B9ED392E26E8EE005CD181 /* CocoaMQTTWebSocket in Frameworks */,
+				E9B9ED372E26E8EE005CD181 /* CocoaMQTT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E9B9ED302E26E8B6005CD181 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E9D80F462E1D460F0037D4F7 = {
 			isa = PBXGroup;
 			children = (
 				E9D80F512E1D460F0037D4F7 /* FlipperMinusOne */,
+				E9B9ED302E26E8B6005CD181 /* Frameworks */,
 				E9D80F502E1D460F0037D4F7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -72,8 +80,8 @@
 			);
 			name = FlipperMinusOne;
 			packageProductDependencies = (
-				E9D810142E1EAB030037D4F7 /* CocoaMQTT */,
-				E9D810162E1EAB030037D4F7 /* CocoaMQTTWebSocket */,
+				E9B9ED362E26E8EE005CD181 /* CocoaMQTT */,
+				E9B9ED382E26E8EE005CD181 /* CocoaMQTTWebSocket */,
 			);
 			productName = FlipperMinusOne;
 			productReference = E9D80F4F2E1D460F0037D4F7 /* FlipperMinusOne.app */;
@@ -104,7 +112,7 @@
 			mainGroup = E9D80F462E1D460F0037D4F7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E9D810132E1EAB030037D4F7 /* XCRemoteSwiftPackageReference "CocoaMQTT" */,
+				E9B9ED352E26E8EE005CD181 /* XCLocalSwiftPackageReference "../../Downloads/CocoaMQTT-2" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E9D80F502E1D460F0037D4F7 /* Products */;
@@ -337,26 +345,20 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		E9D810132E1EAB030037D4F7 /* XCRemoteSwiftPackageReference "CocoaMQTT" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/emqx/CocoaMQTT.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.9;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		E9B9ED352E26E8EE005CD181 /* XCLocalSwiftPackageReference "../../Downloads/CocoaMQTT-2" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../Downloads/CocoaMQTT-2";
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E9D810142E1EAB030037D4F7 /* CocoaMQTT */ = {
+		E9B9ED362E26E8EE005CD181 /* CocoaMQTT */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E9D810132E1EAB030037D4F7 /* XCRemoteSwiftPackageReference "CocoaMQTT" */;
 			productName = CocoaMQTT;
 		};
-		E9D810162E1EAB030037D4F7 /* CocoaMQTTWebSocket */ = {
+		E9B9ED382E26E8EE005CD181 /* CocoaMQTTWebSocket */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E9D810132E1EAB030037D4F7 /* XCRemoteSwiftPackageReference "CocoaMQTT" */;
 			productName = CocoaMQTTWebSocket;
 		};
 /* End XCSwiftPackageProductDependency section */
