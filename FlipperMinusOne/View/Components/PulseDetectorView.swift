@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PulseDetectorView: View {
+    @ObservedObject var router: Router = Router.shared
     @State private var isAnimating = false
 
     var body: some View {
