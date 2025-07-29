@@ -27,10 +27,10 @@
   <li>📥 <strong>Recebimento de comandos JSON</strong> do ESP32</li>
   <li>📤 <strong>Envio de comandos MQTT</strong>:
     <ul>
-      <li><code>infraOn</code> (ligar infravermelho)</li>
+<!--       <li><code>infraOn</code> (ligar infravermelho)</li>
       <li><code>infraOff</code> (desligar)</li>
       <li><code>requestJammerScan</code> (solicita varredura)</li>
-    </ul>
+    </ul> -->
   </li>
   <li>📚 <strong>Modo educacional</strong> com artigos sobre cibersegurança</li>
 </ul>
