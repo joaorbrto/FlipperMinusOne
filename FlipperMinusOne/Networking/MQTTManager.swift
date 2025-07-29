@@ -10,6 +10,7 @@ import CocoaMQTT
 
 class MQTTManager: ObservableObject {
     @Published var receivedData: FlipperData?
+    @Published var receivedCommand: FlipperCommand?
 
     private var mqttClient: CocoaMQTT?
 
@@ -17,16 +18,16 @@ class MQTTManager: ObservableObject {
         configureMQTT()
     }
 
-    public func configureMQTT() {
+   // public func configureMQTT()
+    public func configureMQTT(host: String = "test.mosquitto.org", port: UInt16 = 1883) {
         let clientID = "FlipperClient-\(UUID().uuidString.prefix(6))"
-        mqttClient = CocoaMQTT(clientID: clientID, host: "test.mosquitto.org", port: 1883)
+        mqttClient = CocoaMQTT(clientID: clientID, host: host, port: port)
         mqttClient?.username = nil
         mqttClient?.password = nil
         mqttClient?.keepAlive = 60
         mqttClient?.delegate = self
         mqttClient?.connect()
     }
-
     func publish(message: String, topic: String) {
         mqttClient?.publish(topic, withString: message, qos: .qos1)
     }
@@ -47,16 +48,41 @@ extension MQTTManager: CocoaMQTTDelegate {
         }
     }
 
-    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
-        if let jsonString = message.string {
-            print("Mensagem recebida: \(jsonString)")
-            if let data = try? JSONDecoder().decode(FlipperData.self, from: Data(jsonString.utf8)) {
-                DispatchQueue.main.async {
-                    self.receivedData = data
-                }
-            } else {
-                print("Erro ao decodificar os dados recebidos.")
+//    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
+//        if let jsonString = message.string {
+//            print("Mensagem recebida: \(jsonString)")
+//            if let data = try? JSONDecoder().decode(FlipperData.self, from: Data(jsonString.utf8)) {
+//                DispatchQueue.main.async {
+//                    self.receivedData = data
+//                }
+//            } else {
+//                print("Erro ao decodificar os dados recebidos.")
+//            }
+//        }
+//    }
+    
+     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
+        guard let jsonString = message.string else { return }
+        print("Mensagem recebida: \(jsonString)")
+
+        if let command = try? JSONDecoder().decode(FlipperCommand.self, from: Data(jsonString.utf8)) {
+            DispatchQueue.main.async {
+                self.receivedCommand = command
             }
+        } else {
+            print("⚠️ Erro: mensagem recebida não é um comando válido.")
+        }
+    }
+    
+    func sendCommand(_ type: FlipperCommandType, payload: String? = nil) {
+        var commandDict: [String: Any] = ["command": type.rawValue]
+        if let payload = payload {
+            commandDict["payload"] = payload
+        }
+
+        if let data = try? JSONSerialization.data(withJSONObject: commandDict),
+           let jsonString = String(data: data, encoding: .utf8) {
+            self.publish(message: jsonString, topic: "flipper/commands")
         }
     }
 

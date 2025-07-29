@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct FlipperData: Codable {
-    let carga: Int
+struct FlipperData: Decodable {
+    let status: String
 }
