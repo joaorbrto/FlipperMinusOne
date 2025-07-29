@@ -17,8 +17,7 @@ struct JammerDetectorView: View {
 
     var body: some View {
         ZStack {
-            Color.colorback
-                .ignoresSafeArea()
+            Color.colorback.ignoresSafeArea()
 
             VStack(spacing: 16) {
                 Spacer()
