@@ -18,9 +18,8 @@ struct BluetoothConnectionView: View {
             VStack(spacing: 20) {
                 Text("Buscar dispositivo")
                     .font(.title)
-                    .fontDesign(.rounded)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.accent)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.black)
                     .padding(.top, 40)
                     .padding(.horizontal, 25)
                 Text("Para utilizar todos os recursos que oferecemos, é necessário que o Bluettoth do seu iPhone esteja ligado e conectado com o ESP32.")
@@ -85,7 +84,7 @@ struct BluetoothConnectionView: View {
                         .frame(minWidth: 0, maxWidth: .infinity)
                         .padding(.vertical, 16)
                         .background(Color.accent)
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .cornerRadius(15)
                 }
                 .padding(.bottom, 80)
