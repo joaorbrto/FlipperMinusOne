@@ -2,6 +2,20 @@
 
 <p><strong>FlipperMinusOne</strong> é um projeto acadêmico desenvolvido para a disciplina de <strong>Microcontroladores/Microprocessadores</strong> do curso de <strong>Engenharia de Computação do IFCE</strong> (Instituto Federal do Ceará).</p>
 
+<h2>👥 Equipe</h2>
+
+<ul>
+  <li><strong>Software (iOS + interface):</strong> 
+    <a href="https://github.com/joaoroberto">@joaorbrto</a>, 
+    <a href="https://github.com/hadvtr">@hadvtr</a>
+  </li>
+  <li><strong>Hardware (ESP32 + sensores):</strong> 
+    <a href="https://github.com/lusca0x01">@lusca0x01</a>, 
+    <a href="https://github.com/MTR-S">@MTR-S</a>, 
+    <a href="https://github.com/uiLLer">@uiLLer</a>
+  </li>
+</ul>
+
 <p>O objetivo do trabalho é integrar <strong>hardware (ESP32)</strong> com <strong>software (um app iOS)</strong>, criando uma solução funcional e educativa voltada para <strong>cibersegurança prática</strong>.</p>
 
 <p>O nome <em>FlipperMinusOne</em> faz referência ao famoso dispositivo Flipper Zero, sendo esta uma versão simplificada, com foco em:</p>
