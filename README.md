@@ -6,13 +6,13 @@
 
 <ul>
   <li><strong>Software (iOS + interface):</strong> 
-    <a href="https://github.com/joaoroberto">@joaorbrto</a>, 
-    <a href="https://github.com/hadvtr">@hadvtr</a>
+    <a href="https://github.com/joaorbrto">@João Roberto</a>, 
+    <a href="https://github.com/hadvtr">@Hadassa Vitória</a>
   </li>
   <li><strong>Hardware (ESP32 + sensores):</strong> 
-    <a href="https://github.com/lusca0x01">@lusca0x01</a>, 
-    <a href="https://github.com/MTR-S">@MTR-S</a>, 
-    <a href="https://github.com/uiLLer">@uiLLer</a>
+    <a href="https://github.com/lusca0x01">@Lucas Wagner</a>, 
+    <a href="https://github.com/MTR-S">@Matheus de Sousa</a>, 
+    <a href="https://github.com/uiLLer">@Miller Monteiro</a>
   </li>
 </ul>
 
