@@ -17,16 +17,16 @@ class MQTTManager: ObservableObject {
         configureMQTT()
     }
 
-    public func configureMQTT() {
+   // public func configureMQTT()
+    public func configureMQTT(host: String = "test.mosquitto.org", port: UInt16 = 1883) {
         let clientID = "FlipperClient-\(UUID().uuidString.prefix(6))"
-        mqttClient = CocoaMQTT(clientID: clientID, host: "test.mosquitto.org", port: 1883)
+        mqttClient = CocoaMQTT(clientID: clientID, host: host, port: port)
         mqttClient?.username = nil
         mqttClient?.password = nil
         mqttClient?.keepAlive = 60
         mqttClient?.delegate = self
         mqttClient?.connect()
     }
-
     func publish(message: String, topic: String) {
         mqttClient?.publish(topic, withString: message, qos: .qos1)
     }

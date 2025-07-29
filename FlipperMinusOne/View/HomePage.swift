@@ -87,7 +87,7 @@ struct HomePage: View {
             .navigationDestination(for: Views.self) { view in
                 switch view {
                 case .PulseDetectorView:
-                    PulseDetectorView()
+                    PulseDetectorView(color: .accent)
                 default:
                     EmptyView()
                 }
