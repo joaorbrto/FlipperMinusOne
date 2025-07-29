@@ -10,6 +10,7 @@ import CocoaMQTT
 
 class MQTTManager: ObservableObject {
     @Published var receivedData: FlipperData?
+    @Published var receivedCommand: FlipperCommand?
 
     private var mqttClient: CocoaMQTT?
 
@@ -47,16 +48,41 @@ extension MQTTManager: CocoaMQTTDelegate {
         }
     }
 
-    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
-        if let jsonString = message.string {
-            print("Mensagem recebida: \(jsonString)")
-            if let data = try? JSONDecoder().decode(FlipperData.self, from: Data(jsonString.utf8)) {
-                DispatchQueue.main.async {
-                    self.receivedData = data
-                }
-            } else {
-                print("Erro ao decodificar os dados recebidos.")
+//    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
+//        if let jsonString = message.string {
+//            print("Mensagem recebida: \(jsonString)")
+//            if let data = try? JSONDecoder().decode(FlipperData.self, from: Data(jsonString.utf8)) {
+//                DispatchQueue.main.async {
+//                    self.receivedData = data
+//                }
+//            } else {
+//                print("Erro ao decodificar os dados recebidos.")
+//            }
+//        }
+//    }
+    
+     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
+        guard let jsonString = message.string else { return }
+        print("Mensagem recebida: \(jsonString)")
+
+        if let command = try? JSONDecoder().decode(FlipperCommand.self, from: Data(jsonString.utf8)) {
+            DispatchQueue.main.async {
+                self.receivedCommand = command
             }
+        } else {
+            print("⚠️ Erro: mensagem recebida não é um comando válido.")
+        }
+    }
+    
+    func sendCommand(_ type: FlipperCommandType, payload: String? = nil) {
+        var commandDict: [String: Any] = ["command": type.rawValue]
+        if let payload = payload {
+            commandDict["payload"] = payload
+        }
+
+        if let data = try? JSONSerialization.data(withJSONObject: commandDict),
+           let jsonString = String(data: data, encoding: .utf8) {
+            self.publish(message: jsonString, topic: "flipper/commands")
         }
     }
 
