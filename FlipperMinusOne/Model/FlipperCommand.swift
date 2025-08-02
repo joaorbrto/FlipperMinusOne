@@ -7,14 +7,17 @@
 
 import Foundation
 
-enum FlipperCommandType: String, Decodable {
+enum FlipperCommandType: String, Codable {
     case jammersDetected    // Flipper → App
-    case infraOn            // Flipper → App
-    case infraOff           // Flipper → App
+    case power, mute, up, down, left, right, ok
+    case channelUp, channelDown, volumeUp, volumeDown
+    case number
+    case pause, play, brightness      // Flipper → App
     case scanJammers        // App → Flipper
 }
 
-struct FlipperCommand: Decodable {
+
+struct FlipperCommand: Codable {
     let command: FlipperCommandType
     let payload: String?
 }

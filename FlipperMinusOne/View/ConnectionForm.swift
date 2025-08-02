@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ConnectionForm: View {
-    @StateObject var mqttManager = MQTTManager()
+    @StateObject var mqttManager = MQTTManager.shared
 
     @State private var host: String = ""
     @State private var port: String = ""
@@ -43,6 +43,7 @@ struct ConnectionForm: View {
                         return
                     }
 
+                    mqttManager.deviceName = deviceName // <-- salva nome
                     mqttManager.configureMQTT(host: host, port: UInt16(port) ?? 1883)
                     showValidationError = false
                 }) {
@@ -63,17 +64,7 @@ struct ConnectionForm: View {
                         .foregroundColor(.red)
                 }
 
-                if let data = mqttManager.receivedData {
-                    HStack(spacing: 4) {
-                        Image(systemName: "powerplug.portrait")
-                        Text(data.status)
-                    }
-                    .font(.subheadline)
-                    .foregroundColor(.orange)
-                    .padding(.top, 8)
-                }
-
-                NavigationLink(destination: HomePage(), isActive: $shouldNavigate) {
+                NavigationLink(destination: HomePage(mqttManager: mqttManager), isActive: $shouldNavigate) {
                     EmptyView()
                 }
                 .hidden()
@@ -82,8 +73,8 @@ struct ConnectionForm: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.corSistema)
             .ignoresSafeArea()
-            .onReceive(mqttManager.$isConnected) { newValue in
-                if newValue {
+            .onReceive(mqttManager.$isConnected) { isConnected in
+                if isConnected {
                     shouldNavigate = true
                 }
             }

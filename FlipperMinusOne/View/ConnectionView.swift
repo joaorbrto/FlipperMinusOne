@@ -18,7 +18,7 @@ struct MQTTConnectView: View {
                     
                     HStack {
                         Spacer()
-                        NavigationLink(destination: HomePage()) {
+                        NavigationLink(destination: HomePage(mqttManager: MQTTManager.shared)) {
                             Text("Pular")
                                 .foregroundColor(.orange)
                         }

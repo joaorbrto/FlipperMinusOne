@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct HomePage: View {
-    @ObservedObject var router = Router.shared
-    @ObservedObject var mqttManager = MQTTManager.shared
+    @ObservedObject var mqttManager: MQTTManager
+    
+    @State private var showInfoJammer = false
+    @State private var showInfoIR = false
     
     var body: some View {
         NavigationStack {
@@ -20,14 +22,14 @@ struct HomePage: View {
                             .foregroundColor(.gray)
                             .font(.subheadline)
                         
-                        Text(mqttManager.receivedData?.status ?? "Desconhecido")
+                        Text(mqttManager.deviceName.isEmpty ? "Desconhecido" : mqttManager.deviceName)
                             .font(.title3)
                             .bold()
                             .foregroundColor(.white)
                         
                         HStack(spacing: 4) {
                             Image(systemName: "powerplug.portrait")
-                            Text(mqttManager.receivedData?.status ?? "Desconectado")
+                            Text(mqttManager.isConnected ? "Conectado" : "Desconectado")
                         }
                         .font(.subheadline)
                         .foregroundColor(.orange)
@@ -47,14 +49,16 @@ struct HomePage: View {
                     .foregroundColor(.white)
                 
                 HStack(spacing: 20) {
-                    Button {
-                        router.goToJammerRadar()
-                    } label: {
-                        FeatureCard(title: "Detecção   de Jammer", icon: "JammerRadar")
+                    HStack(spacing: 20) {
+                        NavigationLink(destination: JammerDetectorView(mqttManager: mqttManager)) {
+                            FeatureCard(title: "Detecção   de Jammer", icon: "JammerRadar")
+                        }
+                        NavigationLink(destination: IRRemoteControlView(mqttManager: mqttManager)) {
+                            FeatureCard(title: "Controle Infravermelho", icon: "IRControl")
+                            
+                        }
                     }
-                    FeatureCard(title: "Controle Infravermelho", icon: "IRControl")
                 }
-                
                 
                 Text("Saiba mais")
                     .font(.headline)
@@ -64,17 +68,25 @@ struct HomePage: View {
                     Spacer()
                     
                     VStack(alignment: .center, spacing: 16) {
-                        InfoCard(
-                            title: "Como detectar um Jammer?",
-                            description: "O Jammer é um dispositivo que emite sinais para interferir e bloquear outros sinais.",
-                            icon: "JammerDetect"
-                        )
+                        Button {
+                            showInfoJammer = true
+                        } label: {
+                            InfoCard(
+                                title: "Como detectar um Jammer?",
+                                description: "O Jammer é um dispositivo que emite sinais para interferir e bloquear outros sinais.",
+                                icon: "JammerDetect"
+                            )
+                        }
                         
-                        InfoCard(
-                            title: "Como detectar um Jammer?",
-                            description: "O Jammer é um dispositivo que emite sinais para interferir e bloquear outros sinais.",
-                            icon: "IRCommand"
-                        )
+                        Button {
+                            showInfoIR = true
+                        } label: {
+                            InfoCard(
+                                title: "Comando IR?",
+                                description: "Envie comandos infravermelhos para controlar dispositivos compatíveis.",
+                                icon: "IRCommand"
+                            )
+                        }
                     }
                     
                     Spacer()
@@ -85,19 +97,18 @@ struct HomePage: View {
             .padding()
             .background(Color.colorback.edgesIgnoringSafeArea(.all))
             .navigationTitle("Home")
-            .navigationDestination(for: Views.self) { view in
-                switch view {
-                case .PulseDetectorView:
-                    PulseDetectorView(color: .accent)
-                default:
-                    EmptyView()
-                }
+            .sheet(isPresented: $showInfoJammer) {
+                infoJammer()
             }
-            
+            .sheet(isPresented: $showInfoIR) {
+                infoIR()
+            }
         }
     }
 }
-
 #Preview {
-    HomePage()
+    let mockManager = MQTTManager.shared
+    mockManager.deviceName = "ESP Flipper"
+    mockManager.isConnected = true
+    return HomePage(mqttManager: mockManager)
 }
