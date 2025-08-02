@@ -9,6 +9,9 @@ import Foundation
 import CocoaMQTT
 
 class MQTTManager: ObservableObject {
+    
+    static let shared = MQTTManager()
+
     @Published var receivedData: FlipperData?
     @Published var receivedCommand: FlipperCommand?
 

@@ -9,9 +9,10 @@ import SwiftUI
 
 struct HomePage: View {
     @ObservedObject var router = Router.shared
+    @ObservedObject var mqttManager = MQTTManager.shared
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(alignment: .leading, spacing: 24) {
                 HStack {
                     VStack(alignment: .leading, spacing: 8) {
@@ -26,7 +27,7 @@ struct HomePage: View {
                         
                         HStack(spacing: 4) {
                             Image(systemName: "powerplug.portrait")
-                            Text("Conectado")
+                            Text(mqttManager.receivedData?.status ?? "Desconhecido")
                         }
                         .font(.subheadline)
                         .foregroundColor(.orange)

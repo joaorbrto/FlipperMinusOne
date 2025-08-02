@@ -8,5 +8,6 @@
 import Foundation
 
 struct FlipperData: Decodable {
+    let name: String
     let status: String
 }
