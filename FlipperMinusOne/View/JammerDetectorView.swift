@@ -41,13 +41,11 @@ struct JammerDetectorView: View {
         }
         .onReceive(mqttManager.$receivedCommand) { command in
             guard let command = command else { return }
-            switch command.command {
-            case .jammersDetected:
+
+            if command.command == .jammersDetected {
                 detectionState = .detected
-            case .infraOn, .infraOff:
+            } else {
                 detectionState = .notDetected
-            default:
-                break
             }
         }
     }
