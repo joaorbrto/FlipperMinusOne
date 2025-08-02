@@ -20,14 +20,14 @@ struct HomePage: View {
                             .foregroundColor(.gray)
                             .font(.subheadline)
                         
-                        Text("Nome do dispositivo")
+                        Text(mqttManager.receivedData?.status ?? "Desconhecido")
                             .font(.title3)
                             .bold()
                             .foregroundColor(.white)
                         
                         HStack(spacing: 4) {
                             Image(systemName: "powerplug.portrait")
-                            Text(mqttManager.receivedData?.status ?? "Desconhecido")
+                            Text(mqttManager.receivedData?.status ?? "Desconectado")
                         }
                         .font(.subheadline)
                         .foregroundColor(.orange)

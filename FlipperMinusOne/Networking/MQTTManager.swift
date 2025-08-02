@@ -11,9 +11,9 @@ import CocoaMQTT
 class MQTTManager: ObservableObject {
     
     static let shared = MQTTManager()
-
     @Published var receivedData: FlipperData?
     @Published var receivedCommand: FlipperCommand?
+    @Published var isConnected: Bool = false
 
     private var mqttClient: CocoaMQTT?
 
@@ -133,4 +133,5 @@ extension MQTTManager: CocoaMQTTDelegate {
             print("Inscrito com sucesso nos tópicos: \(success)")
         }
     }
+    
 }
