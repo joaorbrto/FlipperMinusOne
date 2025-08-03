@@ -16,7 +16,7 @@ struct NumberButton: View {
             Text(number)
                 .font(.title2)
                 .frame(width: 56, height: 56)
-                .background(Color.gray.opacity(0.2))
+                .background(Color.numberbuttoncolor)
                 .foregroundColor(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
         }

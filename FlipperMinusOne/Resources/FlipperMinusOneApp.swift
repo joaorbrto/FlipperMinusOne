@@ -9,9 +9,22 @@ import SwiftUI
 
 @main
 struct FlipperMinusOneApp: App {
+    @State private var showSplash = true
+
     var body: some Scene {
         WindowGroup {
-            MQTTConnectView()
+            if showSplash {
+                SplashScreen()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            showSplash = false
+                        }
+                    }
+                    .preferredColorScheme(.dark)
+            } else {
+                MQTTConnectView()
+                    .preferredColorScheme(.dark)
+            }
         }
     }
 }

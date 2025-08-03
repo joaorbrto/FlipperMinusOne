@@ -37,19 +37,35 @@ class MQTTManager: ObservableObject {
         isConnected = false
     }
 
+//    func sendCommand(_ type: FlipperCommandType, payload: String? = nil) {
+//        let command = FlipperCommand(command: type, payload: payload)
+//
+//        do {
+//            let data = try JSONEncoder().encode(command)
+//            if let jsonString = String(data: data, encoding: .utf8) {
+//                print("📤 Publicando para flipper/commands: \(jsonString)") // 👈 Adicione isso
+//                self.publish(message: jsonString, topic: "flipper/commands")
+//            }
+//        } catch {
+//            print("❌ Erro ao codificar comando: \(error)")
+//        }
+//    }
+    
     func sendCommand(_ type: FlipperCommandType, payload: String? = nil) {
         let command = FlipperCommand(command: type, payload: payload)
 
         do {
             let data = try JSONEncoder().encode(command)
             if let jsonString = String(data: data, encoding: .utf8) {
-                print("📤 Publicando para flipper/commands: \(jsonString)") // 👈 Adicione isso
-                self.publish(message: jsonString, topic: "flipper/commands")
+                let topic = command.mqttTopic
+                print("📤 Publicando para \(topic): \(jsonString)")
+                self.publish(message: jsonString, topic: topic)
             }
         } catch {
             print("❌ Erro ao codificar comando: \(error)")
         }
     }
+    
 }
 
 extension MQTTManager: CocoaMQTTDelegate {

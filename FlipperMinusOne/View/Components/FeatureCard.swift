@@ -24,7 +24,7 @@ struct FeatureCard: View {
                 .multilineTextAlignment(.center)
         }
         .frame(width: 174, height: 142)
-        .background(Color(.darkGray))
+        .background(Color.cardcolor)
         .cornerRadius(12)
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct CircleButton: View {
     var icon: String? = nil
     var label: String? = nil
+    var color: Color = Color.buttoncirclecolor
     var action: () -> Void
 
     var body: some View {
@@ -17,19 +18,21 @@ struct CircleButton: View {
             VStack(spacing: 4) {
                 ZStack {
                     Circle()
-                        .fill(Color.gray.opacity(0.2))
+                        .fill(color)
                         .frame(width: 56, height: 56)
+
                     if let icon = icon {
                         Image(systemName: icon)
                             .foregroundColor(.white)
-                            .font(.title2)
+                            
                     } else if let label = label {
                         Text(label)
                             .foregroundColor(.white)
                             .bold()
                     }
                 }
-                if let label = label {
+
+                if let icon = icon, let label = label {
                     Text(label)
                         .font(.caption)
                         .foregroundColor(.white)
@@ -43,19 +46,18 @@ struct CircleButton: View {
     ZStack {
         Color.black.ignoresSafeArea()
         VStack(spacing: 24) {
-            CircleButton(icon: "power") {
+            CircleButton(icon: "power", color: .red) {
                 print("Botão Power pressionado")
             }
 
-            CircleButton(label: "OK") {
+            CircleButton(label: "OK", color: .blue) {
                 print("Botão OK pressionado")
             }
 
-            CircleButton(icon: "play.fill", label: "Play") {
+            CircleButton(icon: "play.fill", label: "Play", color: .green) {
                 print("Play pressionado")
             }
         }
     }
 }
-
 

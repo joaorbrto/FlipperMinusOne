@@ -10,82 +10,66 @@ import SwiftUI
 struct IRRemoteControlView: View {
     @ObservedObject var mqttManager: MQTTManager
     @State private var lastNumberPressed: Int? = nil
-    let gridSpacing: CGFloat = 12
+
+    let gridSpacing: CGFloat = 8
 
     var body: some View {
         ZStack {
-            Color.colorback.ignoresSafeArea()
-
             VStack(spacing: 24) {
-                Text("Controle Infravermelho")
-                    .font(.title2)
-                    .bold()
-                    .padding(.top)
-
+                // Power e Mute
                 HStack {
-                    CircleButton(icon: "power") {
+                    CircleButtonGradient(icon: "power") {
                         mqttManager.sendCommand(.power)
                     }
+
                     Spacer()
+
                     CircleButton(icon: "speaker.slash") {
                         mqttManager.sendCommand(.mute)
                     }
                 }
                 .padding(.horizontal, 40)
 
-                // Navegação
-                ZStack {
-                    VStack(spacing: gridSpacing) {
-                        CircleButton(icon: "chevron.up") {
-                            mqttManager.sendCommand(.up)
-                        }
-
-                        CircleButton(icon: "chevron.down") {
-                            mqttManager.sendCommand(.down)
-                        }
-                    }
-
-                    HStack(spacing: gridSpacing) {
-                        CircleButton(icon: "chevron.left") {
-                            mqttManager.sendCommand(.left)
-                        }
-
-                        CircleButton(label: "OK") {
-                            mqttManager.sendCommand(.ok)
-                        }
-
-                        CircleButton(icon: "chevron.right") {
-                            mqttManager.sendCommand(.right)
-                        }
-                    }
-                }
-
-                // Volume e Canal
-                HStack(spacing: 32) {
+                // CH / botão central / VL
+                HStack(spacing: 16) {
                     VerticalControl(label: "CH", upAction: {
                         mqttManager.sendCommand(.channelUp)
                     }, downAction: {
                         mqttManager.sendCommand(.channelDown)
                     })
 
-                    VerticalControl(label: "🔊", upAction: {
+                    BigCircleButton(mqttManager: mqttManager)
+
+                    VerticalControl(label: "VL", upAction: {
                         mqttManager.sendCommand(.volumeUp)
                     }, downAction: {
                         mqttManager.sendCommand(.volumeDown)
                     })
                 }
 
-                // Teclado Numérico
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 12) {
-                    ForEach((1...9), id: \.self) { n in
-                        NumberButton(number: "\(n)") {
-                            mqttManager.sendCommand(.number, payload: "\(n)")
+                // Teclado Numérico com largura fixa e centralizado
+                VStack(spacing: gridSpacing) {
+                    LazyVGrid(
+                        columns: Array(repeating: GridItem(.fixed(60), spacing: gridSpacing), count: 3),
+                        spacing: gridSpacing
+                    ) {
+                        ForEach((1...9), id: \.self) { n in
+                            NumberButton(number: "\(n)") {
+                                mqttManager.sendCommand(.number, payload: "\(n)")
+                            }
                         }
                     }
+                    .frame(maxWidth: 3 * 60 + 2 * gridSpacing)
 
-                    NumberButton(number: "0") {
-                        mqttManager.sendCommand(.number, payload: "0")
+                    // Botão 0 centralizado
+                    HStack {
+                        Spacer()
+                        NumberButton(number: "0") {
+                            mqttManager.sendCommand(.number, payload: "0")
+                        }
+                        Spacer()
                     }
+                    .frame(maxWidth: 3 * 60 + 2 * gridSpacing)
                 }
 
                 // Controles Inferiores
@@ -96,9 +80,6 @@ struct IRRemoteControlView: View {
                     CircleButton(icon: "play.fill", label: "Play/Stop") {
                         mqttManager.sendCommand(.play)
                     }
-                    CircleButton(icon: "lightbulb", label: "Brilho") {
-                        mqttManager.sendCommand(.brightness)
-                    }
                 }
 
                 Spacer()
@@ -106,19 +87,17 @@ struct IRRemoteControlView: View {
             .padding()
         }
         .onReceive(mqttManager.$receivedCommand) { command in
-                    guard let command = command else { return }
+            guard let command = command else { return }
 
-                    switch command.command {
-                    case .number:
-                        if let payload = command.payload, let num = Int(payload) {
-                            lastNumberPressed = num
-                        }
-                    default:
-                        break
-                    }
-                }
+            if command.command == .number,
+               let payload = command.payload,
+               let num = Int(payload) {
+                lastNumberPressed = num
             }
         }
+        .navigationTitle("Controle Remoto")
+    }
+}
 
 #Preview {
     IRRemoteControlView(mqttManager: MQTTManager())

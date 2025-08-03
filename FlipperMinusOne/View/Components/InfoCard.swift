@@ -27,7 +27,7 @@ struct InfoCard: View {
             .frame(width: 250, height: 100, alignment: .leading)
 
             ZStack {
-                Color.black
+                Color.drawback
 
                 Image(icon)
                     .resizable()
@@ -36,7 +36,7 @@ struct InfoCard: View {
             }
             .frame(width: 111, height: 100)
         }
-        .background(Color(.darkGray))
+        .background(Color.cardcolor)
         .cornerRadius(12)
         .frame(width: 361, height: 100)
     }
