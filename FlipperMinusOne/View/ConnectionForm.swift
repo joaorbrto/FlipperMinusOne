@@ -22,62 +22,71 @@ struct ConnectionForm: View {
 
     var body: some View {
         NavigationView {
-            VStack(alignment: .center, spacing: 44) {
-                Text("Conectando com o dispositivo")
-                    .font(.title)
-                    .bold()
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .padding(.top, 48)
-
-                VStack(spacing: 16) {
-                    customField(title: "Nome do dispositivo", text: $deviceName, placeholder: "Qual o nome do dispositivo?")
-                    customField(title: "Host", text: $host, placeholder: "Qual o host a ser conectado?")
-                    customField(title: "Port", text: $port, placeholder: "Qual a porta a ser conectada?", keyboardType: .numberPad)
-                }
-                .padding(.horizontal)
-
-                Button(action: {
-                    if !formIsValid {
-                        showValidationError = true
-                        return
+            ZStack {
+                Color.black
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        dismissKeyboard()
                     }
 
-                    mqttManager.deviceName = deviceName // <-- salva nome
-                    mqttManager.configureMQTT(host: host, port: UInt16(port) ?? 1883)
-                    showValidationError = false
-                }) {
-                    Text("Continuar")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(formIsValid ? Color.accent : Color.gray)
+                VStack(alignment: .center, spacing: 44) {
+                    Text("Conecte com a ESP")
+                        .font(.title)
+                        .bold()
                         .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(nil)
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 48)
+
+                    VStack(spacing: 16) {
+                        customField(title: "Nome do dispositivo", text: $deviceName, placeholder: "Qual o nome do dispositivo?")
+                        customField(title: "Host", text: $host, placeholder: "Qual o host a ser conectado?")
+                        customField(title: "Port", text: $port, placeholder: "Qual a porta a ser conectada?", keyboardType: .numberPad)
+                    }
+                    .padding(.horizontal)
+
+                    Button(action: {
+                        if !formIsValid {
+                            showValidationError = true
+                            return
+                        }
+
+                        mqttManager.deviceName = deviceName
+                        mqttManager.configureMQTT(host: host, port: UInt16(port) ?? 1883)
+                        showValidationError = false
+                    }) {
+                        Text("Continuar")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(formIsValid ? Color.accent : Color.gray)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 200)
+                    .disabled(!formIsValid)
+
+                    if showValidationError {
+                        Text("Preencha todos os campos antes de conectar.")
+                            .font(.footnote)
+                            .foregroundColor(.red)
+                    }
+
+                    NavigationLink(destination: HomePage(mqttManager: mqttManager), isActive: $shouldNavigate) {
+                        EmptyView()
+                    }
+                    .hidden()
                 }
                 .padding(.horizontal)
-                .padding(.top, 200)
-                .disabled(!formIsValid)
-
-                if showValidationError {
-                    Text("Preencha todos os campos antes de conectar.")
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                }
-
-                NavigationLink(destination: HomePage(mqttManager: mqttManager), isActive: $shouldNavigate) {
-                    EmptyView()
-                }
-                .hidden()
-            }
-            .padding(.horizontal)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.corSistema)
-            .ignoresSafeArea()
-            .onReceive(mqttManager.$isConnected) { isConnected in
-                if isConnected {
-                    shouldNavigate = true
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .onReceive(mqttManager.$isConnected) { isConnected in
+                    if isConnected {
+                        shouldNavigate = true
+                    }
                 }
             }
+            .ignoresSafeArea(.keyboard) // <- evita mover tela ao abrir teclado
         }
     }
 
@@ -94,8 +103,10 @@ struct ConnectionForm: View {
 
             TextField(placeholder, text: text)
                 .keyboardType(keyboardType)
+                .autocorrectionDisabled(true)
+                .textInputAutocapitalization(.never)
                 .padding()
-                .background(Color.black.opacity(0.2))
+                .background(Color.infoback)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.gray, lineWidth: 1)
@@ -103,8 +114,11 @@ struct ConnectionForm: View {
                 .foregroundColor(.white)
         }
     }
-}
 
+    private func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
 #Preview {
     ConnectionForm()
 }

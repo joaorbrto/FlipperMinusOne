@@ -13,27 +13,51 @@ struct VerticalControl: View {
     var downAction: () -> Void
 
     var body: some View {
-        VStack(spacing: 4) {
-            Button(action: upAction) {
-                Image(systemName: "plus")
-                    .font(.title2)
-                    .padding(8)
-                    .background(Color.gray.opacity(0.2))
-                    .clipShape(Circle())
-            }
-
-            Text(label)
-                .foregroundColor(.white)
-                .font(.caption)
-
-            Button(action: downAction) {
-                Image(systemName: "minus")
-                    .font(.title2)
-                    .padding(8)
-                    .background(Color.gray.opacity(0.2))
-                    .clipShape(Circle())
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.numberbuttoncolor)
+                .frame(width: 50, height: 150)
+                .shadow(radius: 8)
+            
+            VStack(spacing: 20) {
+                Button(action: upAction) {
+                    Image(systemName: "plus")
+                        .font(.title2)
+                        .padding(8)
+                        .foregroundStyle(.white)
+                }
+                
+                Text(label)
+                    .foregroundColor(.white)
+                    //.font()
+                
+                Button(action: downAction) {
+                    Image(systemName: "minus")
+                        .font(.title2)
+                        .padding(8)
+                        .foregroundStyle(.white)
+                }
             }
         }
     }
 }
 
+#Preview {
+    ZStack {
+        Color.black.ignoresSafeArea()
+        VStack {
+            VerticalControl(label: "CH", upAction: {
+                print("Canal +")
+            }, downAction: {
+                print("Canal −")
+            })
+
+            VerticalControl(label: "VL", upAction: {
+                print("Volume +")
+            }, downAction: {
+                print("Volume −")
+            })
+        }
+        .padding()
+    }
+}

@@ -11,9 +11,6 @@ struct MQTTConnectView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color.colorback.ignoresSafeArea(.all)
-                
                 VStack(spacing: 32) {
                     
                     HStack {
@@ -83,7 +80,6 @@ struct MQTTConnectView: View {
             }
         }
     }
-}
 
 #Preview {
     MQTTConnectView()

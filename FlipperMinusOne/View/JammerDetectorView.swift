@@ -14,10 +14,9 @@ enum JammerDetectionState {
 struct JammerDetectorView: View {
     @ObservedObject var mqttManager: MQTTManager
     @State private var detectionState: JammerDetectionState = .scanning
-
+    @State private var alreadyRequestedScan = false
     var body: some View {
         ZStack {
-            Color.colorback.ignoresSafeArea()
 
             VStack(spacing: 16) {
                 Spacer()
@@ -46,6 +45,13 @@ struct JammerDetectorView: View {
                 detectionState = .detected
             } else {
                 detectionState = .notDetected
+            }
+        }
+        .onAppear {
+            if !alreadyRequestedScan {
+                print("📡 Solicitando varredura de jammer...")
+                mqttManager.sendCommand(.scanJammers)
+                alreadyRequestedScan = true
             }
         }
     }
