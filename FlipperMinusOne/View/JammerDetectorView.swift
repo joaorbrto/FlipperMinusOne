@@ -14,11 +14,10 @@ enum JammerDetectionState {
 struct JammerDetectorView: View {
     @ObservedObject var mqttManager: MQTTManager
     @State private var detectionState: JammerDetectionState = .scanning
+    @State private var alreadyRequestedScan = false
 
     var body: some View {
         ZStack {
-            Color.colorback.ignoresSafeArea()
-
             VStack(spacing: 16) {
                 Spacer()
 
@@ -39,15 +38,15 @@ struct JammerDetectorView: View {
             }
             .padding()
         }
-        .onReceive(mqttManager.$receivedCommand) { command in
-            guard let command = command else { return }
-            switch command.command {
-            case .jammersDetected:
-                detectionState = .detected
-            case .infraOn, .infraOff:
-                detectionState = .notDetected
-            default:
-                break
+        .onReceive(mqttManager.$isJammerDetected) { detected in
+            detectionState = detected ? .detected : .notDetected
+        }
+        .onAppear {
+            if !alreadyRequestedScan {
+                print("⚙️ Entrando no modo Jammer...")
+                mqttManager.sendMode(.jammer)
+                detectionState = .scanning
+                alreadyRequestedScan = true
             }
         }
     }
@@ -86,3 +85,4 @@ struct JammerDetectorView: View {
 #Preview {
     JammerDetectorView(mqttManager: MQTTManager())
 }
+

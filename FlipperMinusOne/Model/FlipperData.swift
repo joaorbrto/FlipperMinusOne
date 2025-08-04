@@ -8,5 +8,15 @@
 import Foundation
 
 struct FlipperData: Decodable {
+    let name: String
     let status: String
+    let message: String
+}
+
+enum FlipperMode: String, Codable {
+    case ir, jammer, off
+}
+
+struct ModeMessage: Codable {
+    let mode: FlipperMode
 }
