@@ -53,7 +53,12 @@ struct ConnectionForm: View {
                         }
 
                         mqttManager.deviceName = deviceName
-                        mqttManager.configureMQTT(host: host, port: UInt16(port) ?? 1883)
+                        mqttManager.configureMQTT(
+                            host: host,
+                            port: UInt16(port) ?? 1883,
+                            subscribeTopic: "/flippedu/device",
+                            publishTopic: "/flippedu/app"
+                        )
                         showValidationError = false
                     }) {
                         Text("Continuar")

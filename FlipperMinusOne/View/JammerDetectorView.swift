@@ -15,9 +15,9 @@ struct JammerDetectorView: View {
     @ObservedObject var mqttManager: MQTTManager
     @State private var detectionState: JammerDetectionState = .scanning
     @State private var alreadyRequestedScan = false
+
     var body: some View {
         ZStack {
-
             VStack(spacing: 16) {
                 Spacer()
 
@@ -38,19 +38,14 @@ struct JammerDetectorView: View {
             }
             .padding()
         }
-        .onReceive(mqttManager.$receivedCommand) { command in
-            guard let command = command else { return }
-
-            if command.command == .jammersDetected {
-                detectionState = .detected
-            } else {
-                detectionState = .notDetected
-            }
+        .onReceive(mqttManager.$isJammerDetected) { detected in
+            detectionState = detected ? .detected : .notDetected
         }
         .onAppear {
             if !alreadyRequestedScan {
-                print("📡 Solicitando varredura de jammer...")
-                mqttManager.sendCommand(.scanJammers)
+                print("⚙️ Entrando no modo Jammer...")
+                mqttManager.sendMode(.jammer)
+                detectionState = .scanning
                 alreadyRequestedScan = true
             }
         }
@@ -90,3 +85,4 @@ struct JammerDetectorView: View {
 #Preview {
     JammerDetectorView(mqttManager: MQTTManager())
 }
+

@@ -9,35 +9,35 @@ import SwiftUI
 
 struct BigCircleButton: View {
     let gridSpacing: CGFloat = 12
-    @ObservedObject var mqttManager: MQTTManager
+    let onCommand: (IRCommandPreset) -> Void
 
     var body: some View {
         ZStack {
             Circle()
-                .fill(Color.bigcirclecolor) // opcional: leve destaque do círculo base
+                .fill(Color.bigcirclecolor)
                 .frame(width: 206, height: 202)
 
             VStack(spacing: 80) {
                 CircleButton(icon: "chevron.up", color: .clear) {
-                    mqttManager.sendCommand(.up)
+                    onCommand(.up)
                 }
 
                 CircleButton(icon: "chevron.down", color: .clear) {
-                    mqttManager.sendCommand(.down)
+                    onCommand(.down)
                 }
             }
 
             HStack(spacing: gridSpacing) {
                 CircleButton(icon: "chevron.left", color: .clear) {
-                    mqttManager.sendCommand(.left)
+                    onCommand(.left)
                 }
 
                 CircleButton(label: "OK", color: .okcolor) {
-                    mqttManager.sendCommand(.ok)
+                    onCommand(.ok)
                 }
 
                 CircleButton(icon: "chevron.right", color: .clear) {
-                    mqttManager.sendCommand(.right)
+                    onCommand(.right)
                 }
             }
         }
@@ -45,5 +45,7 @@ struct BigCircleButton: View {
 }
 
 #Preview {
-    BigCircleButton(mqttManager: MQTTManager.shared)
+    BigCircleButton { preset in
+        print("🔘 Comando enviado: \(preset)")
+    }
 }

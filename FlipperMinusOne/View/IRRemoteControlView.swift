@@ -5,11 +5,17 @@
 //  Created by Joao Roberto Fernandes Magalhaes on 02/08/25.
 //
 
+//
+//  IRRemoteControlView.swift
+//  FlipperMinusOne
+//
+//  Created by Joao Roberto Fernandes Magalhaes on 02/08/25.
+//
+
 import SwiftUI
 
 struct IRRemoteControlView: View {
     @ObservedObject var mqttManager: MQTTManager
-    @State private var lastNumberPressed: Int? = nil
 
     let gridSpacing: CGFloat = 8
 
@@ -19,13 +25,13 @@ struct IRRemoteControlView: View {
                 // Power e Mute
                 HStack {
                     CircleButtonGradient(icon: "power") {
-                        mqttManager.sendCommand(.power)
+                        mqttManager.sendIRPreset(.power)
                     }
 
                     Spacer()
 
                     CircleButton(icon: "speaker.slash") {
-                        mqttManager.sendCommand(.mute)
+                        mqttManager.sendIRPreset(.mute)
                     }
                 }
                 .padding(.horizontal, 40)
@@ -33,17 +39,24 @@ struct IRRemoteControlView: View {
                 // CH / botão central / VL
                 HStack(spacing: 16) {
                     VerticalControl(label: "CH", upAction: {
-                        mqttManager.sendCommand(.channelUp)
+                        mqttManager.sendIRPreset(.channelUp)
                     }, downAction: {
-                        mqttManager.sendCommand(.channelDown)
+                        mqttManager.sendIRPreset(.channelDown)
                     })
 
-                    BigCircleButton(mqttManager: mqttManager)
+                    BigCircleButton { preset in
+                        // Quando for .ok, envia retransmit
+                        if preset == .ok {
+                            mqttManager.sendRetransmitCommand()
+                        } else {
+                            mqttManager.sendIRPreset(preset)
+                        }
+                    }
 
                     VerticalControl(label: "VL", upAction: {
-                        mqttManager.sendCommand(.volumeUp)
+                        mqttManager.sendIRPreset(.volumeUp)
                     }, downAction: {
-                        mqttManager.sendCommand(.volumeDown)
+                        mqttManager.sendIRPreset(.volumeDown)
                     })
                 }
 
@@ -53,9 +66,11 @@ struct IRRemoteControlView: View {
                         columns: Array(repeating: GridItem(.fixed(60), spacing: gridSpacing), count: 3),
                         spacing: gridSpacing
                     ) {
-                        ForEach((1...9), id: \.self) { n in
+                        ForEach(1...9, id: \.self) { n in
                             NumberButton(number: "\(n)") {
-                                mqttManager.sendCommand(.number, payload: "\(n)")
+                                if let preset = numberCommand(for: n) {
+                                    mqttManager.sendIRPreset(preset)
+                                }
                             }
                         }
                     }
@@ -65,7 +80,7 @@ struct IRRemoteControlView: View {
                     HStack {
                         Spacer()
                         NumberButton(number: "0") {
-                            mqttManager.sendCommand(.number, payload: "0")
+                            mqttManager.sendIRPreset(._0)
                         }
                         Spacer()
                     }
@@ -75,30 +90,46 @@ struct IRRemoteControlView: View {
                 // Controles Inferiores
                 HStack(spacing: 32) {
                     CircleButton(icon: "pause.fill", label: "Pause") {
-                        mqttManager.sendCommand(.pause)
+                        mqttManager.sendIRPreset(.pause)
                     }
                     CircleButton(icon: "play.fill", label: "Play/Stop") {
-                        mqttManager.sendCommand(.play)
+                        mqttManager.sendRetransmitCommand()
                     }
                 }
-
-                Spacer()
-            }
+                if let signal = mqttManager.lastIRSignal {
+                    VStack(spacing: 4) {
+                        Text("'command': 'retransmit'")
+                        Text("Protocolo: \(signal.`protocol`) Endereço: \(signal.address) Comando: \(signal.command)")
+                    }
+                    .font(.footnote)
+                    .padding(.top, 12)
+                    .transition(.opacity)
+                }            }
             .padding()
         }
-        .onReceive(mqttManager.$receivedCommand) { command in
-            guard let command = command else { return }
-
-            if command.command == .number,
-               let payload = command.payload,
-               let num = Int(payload) {
-                lastNumberPressed = num
-            }
-        }
         .navigationTitle("Controle Remoto")
+        .onAppear {
+            print("⚙️ Entrando no modo IR...")
+            mqttManager.sendMode(.ir)
+        }
+    }
+
+    private func numberCommand(for n: Int) -> IRCommandPreset? {
+        switch n {
+        case 0: return ._0
+        case 1: return ._1
+        case 2: return ._2
+        case 3: return ._3
+        case 4: return ._4
+        case 5: return ._5
+        case 6: return ._6
+        case 7: return ._7
+        case 8: return ._8
+        case 9: return ._9
+        default: return nil
+        }
     }
 }
-
 #Preview {
     IRRemoteControlView(mqttManager: MQTTManager())
 }
