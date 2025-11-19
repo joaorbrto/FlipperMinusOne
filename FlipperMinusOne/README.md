@@ -179,7 +179,7 @@ FlippeduMobile/
 <p><strong>Mobile Development:</strong><br/>
 João Roberto • Hadassa Vitória</p>
 
-<p><strong>Hardware Team (ESP32 + sensors):</strong><br/>
+<p><strong>Hardware and Firmware Team (ESP32 + sensors):</strong><br/>
 Lucas Wagner • Matheus de Sousa • Miller Monteiro</p>
 
 <hr/>
